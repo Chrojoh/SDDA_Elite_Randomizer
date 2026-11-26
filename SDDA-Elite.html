@@ -22,6 +22,8 @@
   h1 { margin: 0 0 min(.5rem, 1dvh); font-size: min(2.375rem, 6dvh, 9vw); line-height: 1.1; text-align: center; }
   button { flex: none; width: 100%; min-height: min(44px, 8dvh); font: inherit; font-size: var(--puzzle-size); cursor: pointer; background: #6b21a8; color: white; border: 0; border-radius: 4px; }
   button:active { background: #581c87; }
+  .actions { display: flex; gap: .5rem; }
+  #install { width: auto; padding: 0 .75rem; }
   #results {
     display: grid;
     flex: 1;
@@ -50,7 +52,10 @@
 </style>
 <main>
   <h1>SDDA Elite</h1>
-  <button type="button" id="randomize">Randomize</button>
+  <div class="actions">
+    <button type="button" id="randomize">Randomize</button>
+    <button type="button" id="install" hidden>Install</button>
+  </div>
   <div id="results" aria-live="polite"></div>
   <noscript>This randomizer needs JavaScript enabled in your browser.</noscript>
 </main>
@@ -120,6 +125,23 @@
   rollAll();
 
   if (location.protocol !== "file:" && "serviceWorker" in navigator) {
+    let installPrompt;
+    const install = document.getElementById("install");
+    install.hidden = matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+    window.addEventListener("beforeinstallprompt", event => {
+      event.preventDefault();
+      installPrompt = event;
+    });
+    window.addEventListener("appinstalled", () => { install.hidden = true; });
+    install.addEventListener("click", async () => {
+      if (installPrompt) {
+        const prompt = installPrompt;
+        installPrompt = undefined;
+        await prompt.prompt();
+      } else {
+        alert("On Android, open the browser menu and choose Install app or Add to Home screen. On iPhone, open Safari’s Share menu and choose Add to Home Screen.");
+      }
+    });
     navigator.serviceWorker.register("./sw.js").catch(error => {
       console.warn("Offline setup failed.", error);
     });
