@@ -1,6 +1,6 @@
 const scope = self.registration.scope;
 const cachePrefix = "sdda-elite:" + scope + ":";
-const cacheName = cachePrefix + "10";
+const cacheName = cachePrefix + "11";
 const app = new URL("SDDA-Elite.html", scope).href;
 const assets = [
   "./", "./index.html", "./SDDA-Elite.html", "./manifest.webmanifest",
