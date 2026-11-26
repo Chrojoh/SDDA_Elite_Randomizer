@@ -1,0 +1,14 @@
+{
+  "id": "./",
+  "name": "SDDA Elite",
+  "short_name": "SDDA Elite",
+  "start_url": "./SDDA-Elite.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [
+    { "src": "./icons/elite-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "./icons/elite-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
