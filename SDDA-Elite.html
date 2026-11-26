@@ -21,9 +21,10 @@
   h1 { margin: 0 0 .625rem; font-size: 2.375rem; line-height: 1.1; text-align: center; }
   button { width: 100%; min-height: 44px; font: inherit; cursor: pointer; background: #6b21a8; color: white; border: 0; border-radius: 4px; }
   button:active { background: #581c87; }
-  #results { display: grid; flex: 1; grid-auto-rows: auto; gap: .5rem; margin-top: .5rem; }
+  #results { display: flex; flex: 1; flex-direction: column; gap: .5rem; margin-top: .5rem; }
   section {
     display: flex;
+    flex: 1 0 auto;
     flex-direction: column;
     border: 1px solid #bdbdbd;
     border-radius: 4px;
@@ -35,7 +36,9 @@
   dd { margin: .2rem 0 0; }
   .hide-field { display: grid; grid-template-rows: auto 1fr; }
   .hides { display: grid; grid-auto-rows: 1fr; font-size: 1.25rem; }
-  .hides div { display: grid; align-items: center; min-height: 1.2em; }
+  .hides div { display: grid; align-items: center; }
+  .hides span { grid-area: 1 / 1; overflow-wrap: anywhere; }
+  .row-sizer { visibility: hidden; }
   .distractor-field { display: grid; grid-template-rows: auto 1fr; justify-self: end; width: fit-content; max-width: 100%; text-align: center; }
   .distractor-field dt { text-align: right; }
   .distractors { display: grid; place-items: center; margin: 0; font-size: 1.75rem; font-weight: bold; }
@@ -101,7 +104,13 @@
       const lines = puzzles.length ? puzzles : ["BLANK"];
       area.hides.replaceChildren(...Array.from({ length: area.max }, (_, index) => {
         const line = document.createElement("div");
-        line.textContent = lines[index] ?? "";
+        const sizingText = document.createElement("span");
+        sizingText.className = "row-sizer";
+        sizingText.setAttribute("aria-hidden", "true");
+        sizingText.textContent = "Deep accessible";
+        const resultText = document.createElement("span");
+        resultText.textContent = lines[index] ?? "";
+        line.append(sizingText, resultText);
         return line;
       }));
       area.distractors.textContent = distractors;
